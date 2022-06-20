@@ -1,0 +1,19 @@
+{
+  "name": "sde-challenge",
+  "version": "1.0.0",
+  "description": "Code challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon index.js"
+  },
+  "author": "Francisco Perez",
+  "license": "ISC",
+  "dependencies": {
+    "@types/inquirer": "^7.3.3",
+    "fs": "0.0.1-security",
+    "inquirer": "^8.1.2",
+    "munkres-js": "^1.2.2",
+    "readline": "^1.3.0"
+  }
+}
