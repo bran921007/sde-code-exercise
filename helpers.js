@@ -1,10 +1,10 @@
 const fs = require('fs');
 
-function getNumberOfVowels(str) {
+function getVowels(str) {
     return str.match(/[aeiou]/gi).length;
 }
 
-function getNumberOfConsonants(str) {
+function getConsonants(str) {
     return str.match(/[bcdfghjklmnpqrstvwxyz]/gi).length;
 }
 
@@ -17,7 +17,7 @@ function hasLengthWithCommonFactors(str1, str2) {
 
 /* Returning an array of all the factors of the given number, except for 1. */
 function getFactorsBesides1(length) {
-    return Array.from(Array(length), (_, i) => i + 2)
+    return Array.from(Array(length), (x, i) => i + 2)
                 .filter(i => length % i === 0);
 }
 
@@ -38,8 +38,8 @@ function initMatrix(size, initValue) {
 }
 
 module.exports = {
-    getNumberOfVowels,
-    getNumberOfConsonants,
+    getVowels,
+    getConsonants,
     hasLengthWithCommonFactors,
     stripWhiteSpace,
     fileToArray,
