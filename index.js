@@ -11,7 +11,7 @@ const {getVowels,
 const inquireDataFiles = async () => {
     const input = await inquirer.prompt([
         {
-            name: 'shippingFile',
+            name: 'shippingAddressFile',
             message: 'Path to shipping addresses file (press `Enter` to use default file: `./files/shipments.txt`)'
         },
         {
@@ -19,29 +19,29 @@ const inquireDataFiles = async () => {
             message: 'Path to drivers file (press `Enter` to use default file:  `./files/drivers.txt`)'
         }
     ]);
-    if (!input.shippingFile || !input.driversFile) {
-        input.shippingFile = './files/shipments.txt';
+    if (!input.shippingAddressFile || !input.driversFile) {
+        input.shippingAddressFile = './files/shipments.txt';
         input.driversFile = './files/drivers.txt';
     }
 
-    const { shippingFile, driversFile } = input;
+    const { shippingAddressFile, driversFile } = input;
 
-    const destinations =  fileToArray(shippingFile);
-    const drivers =  fileToArray(driversFile);
+    const destinationsArr =  fileToArray(shippingAddressFile);
+    const driversArr =  fileToArray(driversFile);
    
-    return { drivers, destinations }; 
+    return { driversArr, destinationsArr }; 
 }
 
 
-const getScoreAndMakeAssignments = (names, addresses) => {
+const getScoreAndMakeRoutesAssignment = (names, addresses) => {
    
     const namesToAddressesArr = initMatrix(names.length, {});
     const { rewards, costs } = createRewardAndCostMatrices(names, addresses, namesToAddressesArr);
 
     const assignmentIndexes = munkres(costs);
     const totalScore = calculateTotalSuitabilityScore(rewards, assignmentIndexes);
-    const assignments = getNamesAndAddresses(assignmentIndexes, namesToAddressesArr);
-    return { totalScore, assignments };
+    const routesAssignment = getNamesAndAddresses(assignmentIndexes, namesToAddressesArr);
+    return { totalScore, routesAssignment };
 }
 
 const createRewardAndCostMatrices = (names, addresses, namesToAddressesMap) => {
@@ -92,13 +92,14 @@ const getNamesAndAddresses = (indexes, mapping) => {
 
 const init = () => {
     const dataArr = inquireDataFiles();
-    const res = dataArr.then(data => {
-        const { drivers, destinations } = data;
-        const { totalScore, assignments } = getScoreAndMakeAssignments(drivers, destinations);
-        // display results
-        console.log(`Score: ${totalScore}`);
-        assignments.forEach((destination, driver) => {
-            console.log(`\t ${driver} ---> ${destination}`);
+    dataArr.then(data => {
+        const { driversArr, destinationsArr } = data;
+        const { totalScore, routesAssignment } = getScoreAndMakeRoutesAssignment(driversArr, destinationsArr);
+        // display results:
+        console.log(`Suitability Score : ${totalScore}`);
+        console.log(`==========================================================`);
+        routesAssignment.forEach((address, driver) => {
+            console.log(`${driver} ---> ${address}`);
         });
         
     });
